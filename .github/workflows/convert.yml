@@ -40,7 +40,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add "*.md" "*_images/" 2>/dev/null || true
+
+          # Add all markdown files and image directories
+          find . -name "*.md" ! -name "README.md" -exec git add {} \;
+          find . -type d -name "*_images" -exec git add {} \;
+
+          # Check if there are changes
           if git diff --staged --quiet; then
             echo "No new conversions"
           else
